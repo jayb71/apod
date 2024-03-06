@@ -1,13 +1,52 @@
 import 'dart:convert';
+// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:starmap/api_token.dart';
+import 'package:geolocator/geolocator.dart';
 
 class AstralData extends StatefulWidget {
   const AstralData({Key? key}) : super(key: key);
 
   @override
   State<AstralData> createState() => _AstralDataState();
+}
+
+Future<Position> _determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the
+    // App to enable the location services.
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately.
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  // When we reach here, permissions are granted and we can
+  // continue accessing the position of the device.
+  return await Geolocator.getCurrentPosition();
 }
 
 final TextEditingController _dateController = TextEditingController();
@@ -17,6 +56,7 @@ final TextEditingController _latitudeController = TextEditingController();
 class _AstralDataState extends State<AstralData> {
   late Future<AstralData> futureAstralData;
   DateTime? selectedDate;
+  bool? deviceLocationUsed = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -68,6 +108,25 @@ class _AstralDataState extends State<AstralData> {
               decoration: const InputDecoration(labelText: 'Latitude'),
               controller: _latitudeController,
             ),
+            Row(children: <Widget>[
+              Checkbox(
+                value: deviceLocationUsed,
+                onChanged: (bool? value) {
+                  if (value == true) {
+                    setState(() {
+                      _determinePosition().then((value) {
+                        _latitudeController.text = value.latitude.toString();
+                        _longitudeController.text = value.longitude.toString();
+                        setState(() {
+                          deviceLocationUsed = true;
+                        });
+                      });
+                    });
+                  }
+                },
+              ),
+              const Text('Use Current Location'),
+            ]),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

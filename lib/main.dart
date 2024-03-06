@@ -30,13 +30,24 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ThemeData.dark().colorScheme.copyWith(
+              primary: accentcolor2,
+              secondary: Colors.deepPurpleAccent,
+            ),
         useMaterial3: true,
       ),
-      home: const AstroGeeks(title: 'AstroGeeks'),
+      home: const AstroGeeks(title: 'AstroF***s'),
     );
   }
 }
+
+// Colors
+
+// yellow tint
+
+// const accentcolor1 = Color(0xFFA58B7B);
+const accentcolor1 = Color.fromARGB(151, 165, 139, 123);
+const accentcolor2 = Color(0xFF010C20);
 
 class AstroGeeks extends StatefulWidget {
   const AstroGeeks({Key? key, required this.title}) : super(key: key);
@@ -50,37 +61,57 @@ class _AstroGeeksState extends State<AstroGeeks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(widget.title),
-      ),
+        centerTitle: true,
+      ), */
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Astronomy Picture of the Day!',
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage('assets/images/homebg.jpg'),
+            fit: BoxFit.fill,
+          )),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'Astronomy Picture of the Day!',
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentcolor1,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GetApodToday()),
+                    );
+                  },
+                  child: const Text('Get Today\'s APOD'),
+                ),
+                const Text('Astral Data For The Day!'),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentcolor1,
+                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AstralData()),
+                    );
+                  },
+                  child: const Text('Get Today\'s Data'),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const GetApodToday()),
-                );
-              },
-              child: const Text('Get Today\'s APOD'),
-            ),
-            const Text('Astral Data For The Day!'),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AstralData()),
-                );
-              },
-              child: const Text('Get Today\'s Data'),
-            ),
-          ],
+          ),
         ),
       ),
     );
