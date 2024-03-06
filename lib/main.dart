@@ -94,6 +94,7 @@ class _AstroGeeksState extends State<AstroGeeks> {
                   },
                   child: const Text('Get Today\'s APOD'),
                 ),
+                const Padding(padding: EdgeInsets.all(10.0)),
                 const Text('Astral Data For The Day!'),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

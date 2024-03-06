@@ -204,15 +204,41 @@ class GetAstralData extends StatelessWidget {
         future: fetchAstralData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: <Widget>[
-                //Text(snapshot.data!.status),
-                Text('Sunrise Time: ${snapshot.data!.results.sunrise}'),
-                Text('Sunset Time: ${snapshot.data!.results.sunset}'),
-                Text('Date: ${_dateController.text}'),
-                //Text(snapshot.data!.results),
-              ],
-            );
+            return Center(
+                child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/astraldatabg.png'),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          //Text(snapshot.data!.status),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2,
+                              ),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              child: Text(
+                                'Sunrise Time: ${snapshot.data!.results.sunrise} \nSunset Time: ${snapshot.data!.results.sunset} \nDate: ${_dateController.text}',
+                                style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                              ),
+                            ),
+                          ),
+                          //Text(snapshot.data!.results),
+                        ],
+                      ),
+                    )));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}, error :|');
           }

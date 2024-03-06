@@ -44,12 +44,16 @@ class GetApodToday extends StatelessWidget {
         future: fetchApodToday(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: <Widget>[
-                Image.network(snapshot.data!.url),
-                Text(snapshot.data!.title),
-                Text(snapshot.data!.explanation),
-              ],
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Image.network(snapshot.data!.url),
+                    Text(snapshot.data!.title),
+                    Text(snapshot.data!.explanation),
+                  ],
+                ),
+              ),
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
