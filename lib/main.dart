@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:starmap/pages/apod.dart';
 import 'package:starmap/pages/astral_data.dart';
+import 'package:starmap/pages/weather.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
             ),
         useMaterial3: true,
       ),
-      home: const AstroGeeks(title: 'AstroF***s'),
+      home: const AstroGeeks(title: 'AstroGeeks'),
     );
   }
 }
@@ -109,6 +110,21 @@ class _AstroGeeksState extends State<AstroGeeks> {
                     );
                   },
                   child: const Text('Get Today\'s Data'),
+                ),
+                const Padding(padding: EdgeInsets.all(10.0)),
+                const Text('Weather'),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentcolor1,
+                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Weather()),
+                    );
+                  },
+                  child: const Text('Get Today\'s Weather'),
                 ),
               ],
             ),
